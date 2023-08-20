@@ -1,0 +1,45 @@
+FROM ubuntu:20.04
+
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -yq install curl git build-essential python3 python3-pip python3-dev cmake software-properties-common
+RUN pip3 install requests
+RUN pip3 install click
+RUN pip3 install manifest-tool
+RUN DEBIAN_FRONTEND=noninteractive apt-get -yq install emacs-nox
+RUN mkdir /builder
+WORKDIR /builder
+ADD use-builder.sh /builder/
+RUN mkdir -p /work/mbed-cloud-client-example
+ADD tmp/work /work/
+RUN cd /work/mbed-cloud-client-example && python3 pal-platform/pal-platform.py deploy --target=Yocto_Generic_YoctoLinux_mbedtls generate
+RUN cd /work && git clone https://github.com/IzumaNetworks/mbed-cli && pip3 install /work/mbed-cli
+RUN add-apt-repository -y ppa:mercurial-ppa/releases && apt-get update; pip3 install mercurial --upgrade; exit 0
+RUN cd /work/mbed-cloud-client-example && mbed deploy
+RUN cp -a /work/mbed-cloud-client-example /work/mbed-cloud-client-example.orig
+
+#ADD . /tmp/app
+#WORKDIR /tmp/app
+
+#RUN go build -v -o main .
+#CMD ["/tmp/app/main"]
+#EXPOSE 3000
+#RUN apt-get update
+#RUN apt-get -y install build-essential
+
+# ADD webhook /tmp/webhook
+# WORKDIR /tmp/webhook
+# RUN go get -d -v -t ./... && go build
+
+# ADD pipesend /tmp/pipesend
+# WORKDIR /tmp/pipesend
+# RUN go build -o pipesend main.go
+
+# FROM alpine:3.16.2
+# COPY --from=build /tmp/webhook/webhook /root
+# COPY --from=build /tmp/pipesend/pipesend /root
+
+# RUN mkdir /var/webhook
+
+# CMD /root/webhook -hooks /var/webhook/hooks.json -verbose
+
+# EXPOSE 9000
