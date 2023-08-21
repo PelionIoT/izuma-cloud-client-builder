@@ -23,7 +23,11 @@ cd /work/mbed-cloud-client-aarch64
 # ran during docker build - skip
 #mbed deploy
 # apply patch for aarch64
-patch -s -p1 < ../mbed-cloud-client-example-aarch64.patch
+if [ -z "${SKIP_PATCH}" ]; then
+    patch -s -p1 < ../mbed-cloud-client-example-aarch64.patch
+else
+    echo "Skipping patches"
+fi
 #python3 pal-platform/pal-platform.py deploy --target=Yocto_Generic_YoctoLinux_mbedtls generate
 if [ -e /auth/mbed_cloud_dev_credentials.c ]; then
     cp /auth/mbed_cloud_dev_credentials.c .

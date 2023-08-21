@@ -18,3 +18,25 @@ Pass in your [access key](https://developer.izumanetworks.com/docs/device-manage
 
 Pass in your `mbed_cloud_dev_credentials.c` by placing them in a local folder passed to the container as `/auth`
 
+### Running a build
+
+In the container, from `/builder` run:
+
+```
+./use-builder.sh windriver-aarch64
+```
+
+you will have a pronpt like:
+
+```
+[windriver-aarch64]root@1aa3bd3ecb59:
+```
+
+Do
+
+```
+[windriver-aarch64]root@1aa3bd3ecb59: bash build-mbed-cloud-client.sh
+```
+
+This will attempt to build the mbed-cloud-client example
+
