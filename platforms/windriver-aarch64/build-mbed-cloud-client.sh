@@ -9,6 +9,9 @@ CC=aarch64-none-linux-gnu-gcc
 CXX=aarch64-none-linux-gnu-g++
 export CC=$CC
 export CXX=$CXX
+#export LIBRARY
+
+IZUMA_USE_CORES="${IZUMA_USE_CORES:-8}"
 
 # remove anything from a previous builder
 rm -rf /work/mbed-cloud-client-example
@@ -36,5 +39,5 @@ else
 fi
 
 cd __Yocto_Generic_YoctoLinux_mbedtls/
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt"
+cmake --G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt" -- -j ${IZUMA_USE_CORES}
 make mbedCloudClientExample.elf
