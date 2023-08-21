@@ -3,13 +3,11 @@
 # aarch64 for Wind River
 #RUN curl https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/10.3-2021.07/gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2 --output gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2
 RUN mkdir -p <% $MYPLATFORM %>/toolchain
-ADD <% $ADDS %>/gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2 <% $MYPLATFORM %>/toolchain/
-ADD <% $ADDS %>/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz <% $MYPLATFORM %>/toolchain/
+ADD <% $ADDS %>/gcc-arm-10.3-2021.07-x86_64-arm-none-eabi.tar.xz <% $MYPLATFORM %>/toolchain/
 #RUN cd <% $MYPLATFORM %>/toolchain && mv gcc-arm-none-eabi-10.3-2021.07 gcc-arm-none-eabi
-RUN cd <% $MYPLATFORM %>/toolchain && mv gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu gcc-aarch64-none-eabi
-ADD <% $ADDS %>/libidn2-latest.tar.gz <% $MYPLATFORM %>/
+RUN cd <% $MYPLATFORM %>/toolchain && mv gcc-arm-10.3-2021.07-x86_64-arm-none-eabi gcc-arm-none-eabi
+# ADD <% $ADDS %>/libidn2-latest.tar.gz <% $MYPLATFORM %>/
 ADD <% $MYDIR %>/buildenv.inc <% $MYPLATFORM %>/
 ADD <% $MYDIR %>/build-aux-libs.sh <% $MYPLATFORM %>/
 ADD <% $MYDIR %>/build-mbed-cloud-client.sh <% $MYPLATFORM %>/
-ADD <% $MYDIR %>/mbed-cloud-client-aarch64.patch <% $MYPLATFORM %>/
 RUN cd <% $MYPLATFORM %> && ./build-aux-libs.sh

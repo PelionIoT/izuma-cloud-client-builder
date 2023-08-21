@@ -26,7 +26,7 @@ In the container, from `/builder` run:
 ./use-builder.sh windriver-aarch64
 ```
 
-you will have a pronpt like:
+you will have a prompt like:
 
 ```
 [windriver-aarch64]root@1aa3bd3ecb59:

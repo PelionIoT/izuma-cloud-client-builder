@@ -1,8 +1,8 @@
 #!/bin/bash 
 
-PATH=/builder/windriver-aarch64/toolchain/gcc-aarch64-none-eabi/bin:$PATH
+PATH=/builder/windriver-aarch64/toolchain/gcc-arm-none-eabi/bin:$PATH
 export PATH=$PATH
-SYSROOT=/builder/windriver-aarch64/toolchain/gcc-aarch64-none-eabi
+SYSROOT=/builder/windriver-aarch64/toolchain/gcc-arm-none-eabi
 ARMGCC_DIR=$SYSROOT
 export ARMGCC_DIR=$ARMGCC_DIR
 CC=aarch64-none-linux-gnu-gcc
@@ -24,7 +24,7 @@ cd /work/mbed-cloud-client-aarch64
 #mbed deploy
 # apply patch for aarch64
 if [ -z "${SKIP_PATCH}" ]; then
-    patch -s -p1 < /builder/windriver-aarch64/mbed-cloud-client-aarch64.patch
+    patch -s -p1 < ../mbed-cloud-client-example-aarch64.patch
 else
     echo "Skipping patches"
 fi
@@ -43,6 +43,5 @@ else
 fi
 
 cd __Yocto_Generic_YoctoLinux_mbedtls/
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt"
-#-- -j ${IZUMA_USE_CORES}
+cmake --G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt" -- -j ${IZUMA_USE_CORES}
 make mbedCloudClientExample.elf
