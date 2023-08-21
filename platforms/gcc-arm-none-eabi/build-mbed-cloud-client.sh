@@ -45,3 +45,7 @@ fi
 cd __Yocto_Generic_YoctoLinux_mbedtls/
 cmake --G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt" -- -j ${IZUMA_USE_CORES}
 make mbedCloudClientExample.elf
+
+if [ -e __Yocto_Generic_YoctoLinux_mbedtls/Debug/mbedCloudClientExample.elf ]; then
+    cp __Yocto_Generic_YoctoLinux_mbedtls/Debug/mbedCloudClientExample.elf /out/__Yocto_Generic_YoctoLinux_mbedtls/Debug/mbedCloudClientExample-arm32.elf
+fi

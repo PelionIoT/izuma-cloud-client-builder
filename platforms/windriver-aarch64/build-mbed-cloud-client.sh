@@ -40,9 +40,23 @@ if [[ -z "${IZUMA_ACCESS_KEY}" ]]; then
     exit 1
 else 
     manifest-dev-tool init --access-key ${IZUMA_ACCESS_KEY}
+    if [ -d ".manifest-dev-tool" ]; then
+        cp -r ./.manifest-dev-tool /out/manifest-dev-tool-aarch64
+    else
+        echo "Cloud not find .manifest-dev-tool folder"
+    fi
 fi
 
 cd __Yocto_Generic_YoctoLinux_mbedtls/
 cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt"
 #-- -j ${IZUMA_USE_CORES}
-make mbedCloudClientExample.elf
+make -j${IZUMA_USE_CORES} mbedCloudClientExample.elf
+
+if [ -f "Debug/mbedCloudClientExample.elf" ]; then
+    cp Debug/mbedCloudClientExample.elf /out/mbedCloudClientExample-aarch64.elf
+else   
+    echo "ERROR: no binary produced"
+    exit 1
+fi
+
+
