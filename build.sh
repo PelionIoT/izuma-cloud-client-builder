@@ -9,47 +9,47 @@ done
 
 MYDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-cd $MYDIR
+cd "${MYDIR}" || exit
 
-TMPDIR=$MYDIR/tmp
-mkdir -p $TMPDIR/work
+TMPDIR="${MYDIR}"/tmp
+mkdir -p "${TMPDIR}"/work
 
-cp Dockerfile.stub $TMPDIR/Dockerfile.tmp
+cp Dockerfile.stub "${TMPDIR}"/Dockerfile.tmp
 
-for d in ${MYDIR}/platforms/* ; do 
-  D=$(basename ${d})
+for d in "${MYDIR}"/platforms/* ; do 
+  D=$(basename "${d}")
 done
 
-rm -rf $TMPDIR/mbed-cloud-client-example
-cd $TMPDIR/work
+rm -rf "${TMPDIR}"/mbed-cloud-client-example
+cd "${TMPDIR}"/work || exit
 git clone http://github.com/PelionIoT/mbed-cloud-client-example
-cp $MYDIR/mbed-cloud-client-example-aarch64.patch $TMPDIR/work
+cp "$MYDIR"/mbed-cloud-client-example-aarch64.patch "${TMPDIR}"/work
 # look in platforms folder, and slap all stub files into a single Dockerfile.temp
-cd $MYDIR
-for d in ${MYDIR}/platforms/* ; do 
+cd "$MYDIR" || exit
+for d in "${MYDIR}"/platforms/* ; do
   echo "platform: ${d}"
-  D=$(basename ${d})
-  ADDS=tmp/${D}/adds
+  D=$(basename "${d}")
+  ADDS=tmp/"${D}"/adds
   # this is a directory on the container image
-  MYPLATFORM=/builder/${D}
+  MYPLATFORM=/builder/"${D}"
   CONTAINTER_OUTPUT=/out
-  mkdir -p $TMPDIR/${D}/adds
-  if [ -e $MYDIR/platforms/${D}/prebuild.sh ]; then
+  mkdir -p "${TMPDIR}/${D}"/adds
+  if [ -e "$MYDIR"/platforms/"${D}"/prebuild.sh ]; then
     echo "prebuild for ${D}..."
-    ADDS=${ADDS} CONTAINTER_OUTPUT=/out bash $MYDIR/platforms/${D}/prebuild.sh
+    ADDS="${ADDS}" CONTAINTER_OUTPUT=/out bash "$MYDIR"/platforms/"${D}"/prebuild.sh
   else 
     echo "No prebuild.sh for platform ${D}"
   fi
-  if [ -e $MYDIR/platforms/${D}/Dockerfile.stub ]; then
+  if [ -e "${MYDIR}"/platforms/"${D}"/Dockerfile.stub ]; then
   # make the generator from the template
-    $MYDIR/bash-tpl $MYDIR/platforms/${D}/Dockerfile.stub > $TMPDIR/${D}/Dockerfile.stub.out
+    "${MYDIR}"/bash-tpl "${MYDIR}"/platforms/"${D}"/Dockerfile.stub > "${TMPDIR}/${D}"/Dockerfile.stub.out
     # run generator to create final stub of Dockerfile
-    MYDIR=platforms/${D} ADDS=${ADDS} CONTAINTER_OUTPUT=/out MYPLATFORM=${MYPLATFORM} bash $TMPDIR/${D}/Dockerfile.stub.out > $TMPDIR/${D}/Dockerfile.stub.final
-    cat $TMPDIR/${D}/Dockerfile.stub.final >> $TMPDIR/Dockerfile.tmp
+    MYDIR=platforms/"${D}" ADDS="${ADDS}" CONTAINTER_OUTPUT=/out MYPLATFORM="${MYPLATFORM}" bash "${TMPDIR}/${D}"/Dockerfile.stub.out > "${TMPDIR}/${D}"/Dockerfile.stub.final
+    cat "${TMPDIR}/${D}"/Dockerfile.stub.final >> "${TMPDIR}"/Dockerfile.tmp
   else 
     echo "No Dockerfile.stub for platform ${D}"
   fi
 done
 
-docker build . -f $TMPDIR/Dockerfile.tmp --tag izuma-cloud-client-builder:latest
+docker build . -f "${TMPDIR}"/Dockerfile.tmp --tag izuma-cloud-client-builder:latest
 
