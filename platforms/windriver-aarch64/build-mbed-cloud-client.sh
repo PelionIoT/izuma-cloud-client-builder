@@ -28,32 +28,15 @@ if [ -z "${SKIP_PATCH}" ]; then
 else
     echo "Skipping patches"
 fi
-#python3 pal-platform/pal-platform.py deploy --target=Yocto_Generic_YoctoLinux_mbedtls generate
-if [ -e /auth/mbed_cloud_dev_credentials.c ]; then
-    cp /auth/mbed_cloud_dev_credentials.c .
-else
-    echo "Need to place mbed_cloud_dev_credentials.c in /auth"
-    exit 1
-fi
-if [[ -z "${IZUMA_ACCESS_KEY}" ]]; then 
-    echo "Need to set IZUMA_ACCESS_KEY"
-    exit 1
-else 
-    manifest-dev-tool init --access-key ${IZUMA_ACCESS_KEY}
-    if [ -d ".manifest-dev-tool" ]; then
-        cp -r ./.manifest-dev-tool /out/manifest-dev-tool-aarch64
-    else
-        echo "Cloud not find .manifest-dev-tool folder"
-    fi
-fi
 
+sed -i "s/MBED_CONF_APP_DEVELOPER_MODE=1/MBED_CONF_APP_DEVELOPER_MODE=0/" define.txt
 cd __Yocto_Generic_YoctoLinux_mbedtls/
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt"
-#-- -j ${IZUMA_USE_CORES}
-make -j${IZUMA_USE_CORES} mbedCloudClientExample.elf
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Release" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt"
 
-if [ -f "Debug/mbedCloudClientExample.elf" ]; then
-    cp Debug/mbedCloudClientExample.elf /out/mbedCloudClientExample-aarch64.elf
+make -j${IZUMA_USE_CORES}
+
+if [ -f "Release/mbedCloudClientExample.elf" ]; then
+    cp -r Release/ /out/Release-aarch64
 else   
     echo "ERROR: no binary produced"
     exit 1
