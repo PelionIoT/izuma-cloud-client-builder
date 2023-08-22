@@ -11,5 +11,6 @@ ADD <% $ADDS %>/libidn2-latest.tar.gz <% $MYPLATFORM %>/
 ADD <% $MYDIR %>/buildenv.inc <% $MYPLATFORM %>/
 ADD <% $MYDIR %>/build-aux-libs.sh <% $MYPLATFORM %>/
 ADD <% $MYDIR %>/build-mbed-cloud-client.sh <% $MYPLATFORM %>/
+ADD <% $MYDIR %>/build-factory-configurator.sh <% $MYPLATFORM %>/
 ADD <% $MYDIR %>/mbed-cloud-client-aarch64.patch <% $MYPLATFORM %>/
 RUN cd <% $MYPLATFORM %> && ./build-aux-libs.sh

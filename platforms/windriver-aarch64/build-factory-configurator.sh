@@ -14,11 +14,11 @@ export CXX=$CXX
 IZUMA_USE_CORES="${IZUMA_USE_CORES:-8}"
 
 # remove anything from a previous builder
-rm -rf /work/mbed-cloud-client-example
+rm -rf /work/factory-configurator-client-example
 # start with the original
-cp -a /work/mbed-cloud-client-example.orig /work/mbed-cloud-client-aarch64
+cp -a /work/factory-configurator-client-example.orig /work/factory-configurator-client-aarch64
 # we have to keep the original name b/c apparent it is referenced statically in the CMake files
-cd /work/mbed-cloud-client-aarch64
+cd /work/factory-configurator-client-aarch64
 
 # ran during docker build - skip
 #mbed deploy
@@ -29,14 +29,13 @@ else
     echo "Skipping patches"
 fi
 
-sed -i "s/MBED_CONF_APP_DEVELOPER_MODE=1/MBED_CONF_APP_DEVELOPER_MODE=0/" define.txt
 cd __Yocto_Generic_YoctoLinux_mbedtls/
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Release" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../define.txt"
+cmake -G "Unix Makefiles" -DPARSEC_TPM_SE_SUPPORT=OFF -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_TOOLCHAIN_FILE="./../pal-platform/Toolchain/ARMGCC/ARMGCC.cmake" -DEXTERNAL_DEFINE_FILE="./../linux-config.cmake"
+#-- -j ${IZUMA_USE_CORES}
+make -j${IZUMA_USE_CORES} factory-configurator-client-example.elf
 
-make -j${IZUMA_USE_CORES}
-
-if [ -f "Release/mbedCloudClientExample.elf" ]; then
-    cp Release/mbedCloudClientExample.elf /out/mbedCloudClientExample-aarch64.elf
+if [ -f "Debug/factory-configurator-client-example.elf" ]; then
+    cp Debug/factory-configurator-client-example.elf /out/factory-configurator-client-example-aarch64.elf
 else   
     echo "ERROR: no binary produced"
     exit 1
