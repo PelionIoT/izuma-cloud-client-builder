@@ -32,11 +32,10 @@ for d in "${MYDIR}"/platforms/* ; do
   ADDS=tmp/"${D}"/adds
   # this is a directory on the container image
   MYPLATFORM=/builder/"${D}"
-  CONTAINTER_OUTPUT=/out
   mkdir -p "${TMPDIR}/${D}"/adds
   if [ -e "$MYDIR"/platforms/"${D}"/prebuild.sh ]; then
     echo "prebuild for ${D}..."
-    ADDS="${ADDS}" CONTAINTER_OUTPUT=/out bash "$MYDIR"/platforms/"${D}"/prebuild.sh
+    ADDS="${ADDS}" bash "$MYDIR"/platforms/"${D}"/prebuild.sh
   else 
     echo "No prebuild.sh for platform ${D}"
   fi
@@ -44,7 +43,7 @@ for d in "${MYDIR}"/platforms/* ; do
   # make the generator from the template
     "${MYDIR}"/bash-tpl "${MYDIR}"/platforms/"${D}"/Dockerfile.stub > "${TMPDIR}/${D}"/Dockerfile.stub.out
     # run generator to create final stub of Dockerfile
-    MYDIR=platforms/"${D}" ADDS="${ADDS}" CONTAINTER_OUTPUT=/out MYPLATFORM="${MYPLATFORM}" bash "${TMPDIR}/${D}"/Dockerfile.stub.out > "${TMPDIR}/${D}"/Dockerfile.stub.final
+    MYDIR=platforms/"${D}" ADDS="${ADDS}" MYPLATFORM="${MYPLATFORM}" bash "${TMPDIR}/${D}"/Dockerfile.stub.out > "${TMPDIR}/${D}"/Dockerfile.stub.final
     cat "${TMPDIR}/${D}"/Dockerfile.stub.final >> "${TMPDIR}"/Dockerfile.tmp
   else 
     echo "No Dockerfile.stub for platform ${D}"
