@@ -11,7 +11,7 @@ Go to project root and run:
 ### Usage:
 
 ```
-docker run -v /tmp:/out -it izuma-cloud-client-builder 
+docker run --rm -v /tmp:/out -it izuma-cloud-client-builder 
 ```
 
 Pass in a volume for `/out` to place finished binaries.
