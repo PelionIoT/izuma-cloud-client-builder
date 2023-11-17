@@ -10,6 +10,20 @@ Go to project root and run:
 
 ### Usage:
 
+### Build with pre-generated update_default_resources.c
+
+```
+docker run -v ./local-creds:/auth -v /tmp:/out -it izuma-cloud-client-builder 
+```
+
+Pass in your `mbed_cloud_dev_credentials.c` and `update_default_resources.c` by placing them in a local folder passed to the container as `/auth`
+
+Pass in a volume for `/out` to place finished binaries.
+
+
+### Build with generated update_default_resources.c
+
+
 ```
 docker run -e IZUMA_ACCESS_KEY=ak_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -v ./local-creds:/auth -v /tmp:/out -it izuma-cloud-client-builder 
 ```

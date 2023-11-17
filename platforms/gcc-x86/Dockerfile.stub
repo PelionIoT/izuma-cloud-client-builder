@@ -1,0 +1,2 @@
+ADD <% $MYDIR %>/buildenv.inc <% $MYPLATFORM %>/
+ADD <% $MYDIR %>/build-mbed-cloud-client.sh <% $MYPLATFORM %>/
