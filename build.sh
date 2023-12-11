@@ -22,8 +22,10 @@ done
 
 rm -rf $TMPDIR/mbed-cloud-client-example
 cd $TMPDIR/work
-git clone http://github.com/PelionIoT/mbed-cloud-client-example
+git clone http://github.com/PelionIoT/mbed-cloud-client-example -b 4.13.2
 cp $MYDIR/mbed-cloud-client-example-aarch64.patch $TMPDIR/work
+cp $MYDIR/curl_update.patch $TMPDIR/work
+
 # look in platforms folder, and slap all stub files into a single Dockerfile.temp
 cd $MYDIR
 for d in ${MYDIR}/platforms/* ; do 

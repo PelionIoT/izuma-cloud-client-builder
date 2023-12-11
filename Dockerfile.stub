@@ -17,6 +17,7 @@ RUN cd /work && git clone https://github.com/IzumaNetworks/mbed-cli && pip3 inst
 RUN add-apt-repository -y ppa:mercurial-ppa/releases && apt-get update; pip3 install mercurial --upgrade; exit 0
 # unnecessary library
 RUN cd /work/mbed-cloud-client-example && rm -f mbed-os.lib
+RUN cd /work/mbed-cloud-client-example && patch -N -s -p1 < /work/curl_update.patch
 RUN cd /work/mbed-cloud-client-example && mbed deploy
 RUN cd /work/mbed-cloud-client-example && python3 pal-platform/pal-platform.py deploy --target=Yocto_Generic_YoctoLinux_mbedtls generate
 RUN cd /work/mbed-cloud-client-example && python3 pal-platform/pal-platform.py deploy --target=x86_x64_NativeLinux_mbedtls generate
