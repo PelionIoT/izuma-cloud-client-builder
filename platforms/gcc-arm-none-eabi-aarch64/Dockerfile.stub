@@ -1,0 +1,7 @@
+RUN mkdir -p <% $MYPLATFORM %>/toolchain
+ADD <% $ADDS %>/gcc-arm-10.3-2021.10-aarch64.tar.bz2  <% $MYPLATFORM %>/toolchain/
+#RUN cd <% $MYPLATFORM %>/toolchain && mv gcc-arm-10.3-2021.10-aarch64.tar.bz2 gcc-arm-none-eabi
+ADD <% $MYDIR %>/buildenv.inc <% $MYPLATFORM %>/
+ADD <% $MYDIR %>/build-aux-libs.sh <% $MYPLATFORM %>/
+ADD <% $MYDIR %>/build-mbed-cloud-client.sh <% $MYPLATFORM %>/
+RUN cd <% $MYPLATFORM %> && ./build-aux-libs.sh

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# MUST BE RUN IN PLATFORM ROOT FOLDER
+
