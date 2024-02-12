@@ -35,16 +35,25 @@ else
     echo "Need to place mbed_cloud_dev_credentials.c in /auth"
     exit 1
 fi
-if [[ -z "${IZUMA_ACCESS_KEY}" ]]; then 
-    echo "Need to set IZUMA_ACCESS_KEY"
-    exit 1
-else 
-    manifest-dev-tool init --access-key ${IZUMA_ACCESS_KEY}
+if [ -e /auth/update_default_resources.c ]; then
+    cp /auth/update_default_resources.c .
+else
+    if [[ -z "${IZUMA_ACCESS_KEY}" ]]; then
+        manifest-dev-tool init
+    else
+        manifest-dev-tool init --access-key "${IZUMA_ACCESS_KEY}"
+    fi
     if [ -d ".manifest-dev-tool" ]; then
-        cp -r ./.manifest-dev-tool /out/manifest-dev-tool-aarch64
+        cp -r ./.manifest-dev-tool /out/manifest-dev-tool-gcc-x86
     else
         echo "Cloud not find .manifest-dev-tool folder"
     fi
+fi
+if [ -e /auth/fota_linux_ifs.cpp ]; then
+    cp /auth/fota_linux_ifs.cpp .
+else
+    echo "Need to place fota_linux_ifs.cpp in /auth"
+    exit 1
 fi
 
 cd __Yocto_Generic_YoctoLinux_mbedtls/
