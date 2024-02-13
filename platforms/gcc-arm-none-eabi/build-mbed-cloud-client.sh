@@ -14,20 +14,11 @@ export CXX=$CXX
 IZUMA_USE_CORES="${IZUMA_USE_CORES:-8}"
 
 # remove anything from a previous builder
-rm -rf /work/mbed-cloud-client-example
+rm -rf /work/mbed-cloud-client-gcc-arm-none-eabi
 # start with the original
 cp -a /work/mbed-cloud-client-example.orig /work/mbed-cloud-client-gcc-arm-none-eabi
 # we have to keep the original name b/c apparent it is referenced statically in the CMake files
 cd /work/mbed-cloud-client-gcc-arm-none-eabi
-
-# ran during docker build - skip
-#mbed deploy
-# apply patch for aarch64
-#if [ -z "${SKIP_PATCH}" ]; then
-    #patch -s -p1 < ../mbed-cloud-client-example-aarch64.patch
-#else
-    #echo "Skipping patches"
-#fi
 
 if [ -e /auth/mbed_cloud_dev_credentials.c ]; then
     cp /auth/mbed_cloud_dev_credentials.c .

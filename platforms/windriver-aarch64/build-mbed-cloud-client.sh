@@ -14,7 +14,7 @@ export CXX=$CXX
 IZUMA_USE_CORES="${IZUMA_USE_CORES:-8}"
 
 # remove anything from a previous builder
-rm -rf /work/mbed-cloud-client-example
+rm -rf /work/mbed-cloud-client-aarch64
 # start with the original
 cp -a /work/mbed-cloud-client-example.orig /work/mbed-cloud-client-aarch64
 # we have to keep the original name b/c apparent it is referenced statically in the CMake files
